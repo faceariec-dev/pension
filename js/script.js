@@ -12,7 +12,7 @@
   var header = document.querySelector(".site-header");
   if (header) {
     var onScrollHeader = function () {
-      header.classList.toggle("is-scrolled", window.scrollY > 8);
+      header.classList.toggle("is-scrolled", window.scrollY > 40);
     };
     onScrollHeader();
     window.addEventListener("scroll", onScrollHeader, { passive: true });
@@ -66,6 +66,46 @@
   }
 
   /* -----------------------------------------------------------------
+     Zvýraznění aktivní sekce v menu (scrollspy)
+  ----------------------------------------------------------------- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-primary a[href*="#"]'));
+  var sectionMap = navLinks
+    .map(function (link) {
+      var id = link.getAttribute("href").split("#")[1];
+      var section = id ? document.getElementById(id) : null;
+      return section ? { link: link, section: section } : null;
+    })
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && sectionMap.length) {
+    var setActive = function (id) {
+      navLinks.forEach(function (link) {
+        var isActive = link.getAttribute("href").split("#")[1] === id;
+        if (isActive) {
+          link.setAttribute("aria-current", "true");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    var spyObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+
+    sectionMap.forEach(function (item) {
+      spyObserver.observe(item.section);
+    });
+  }
+
+  /* -----------------------------------------------------------------
      Animace prvků při scrollování (IntersectionObserver)
   ----------------------------------------------------------------- */
   var revealEls = document.querySelectorAll(".reveal");
@@ -97,7 +137,7 @@
   ----------------------------------------------------------------- */
   var mobileCta = document.querySelector(".mobile-cta");
   var hero = document.querySelector(".hero");
-  var inquirySection = document.getElementById("poptavka");
+  var inquirySection = document.getElementById("kontakt");
 
   if (mobileCta && hero) {
     var heroObserver = new IntersectionObserver(
@@ -199,6 +239,31 @@
       if (e.key === "ArrowRight") updateSlide(currentIndex + 1);
       if (e.key === "ArrowLeft") updateSlide(currentIndex - 1);
     });
+
+    // Swipe ovládání na mobilu (další / předchozí)
+    var touchStartX = null;
+    lightbox.addEventListener(
+      "touchstart",
+      function (e) {
+        touchStartX = e.changedTouches[0].clientX;
+      },
+      { passive: true }
+    );
+    lightbox.addEventListener(
+      "touchend",
+      function (e) {
+        if (touchStartX === null) return;
+        var deltaX = e.changedTouches[0].clientX - touchStartX;
+        var SWIPE_THRESHOLD = 40;
+        if (deltaX > SWIPE_THRESHOLD) {
+          updateSlide(currentIndex - 1);
+        } else if (deltaX < -SWIPE_THRESHOLD) {
+          updateSlide(currentIndex + 1);
+        }
+        touchStartX = null;
+      },
+      { passive: true }
+    );
   }
 
   /* -----------------------------------------------------------------

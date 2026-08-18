@@ -11,7 +11,7 @@
 <link rel="alternate" hreflang="de" href="https://www.pension48.cz/de/terms.html">
 <link rel="alternate" hreflang="x-default" href="https://www.pension48.cz/terms.html">
 <meta name="robots" content="noindex, follow">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232f4a3c'/%3E%3Ctext x='50' y='63' font-size='42' font-family='Georgia,serif' fill='%23fff' text-anchor='middle'%3E48%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2326323a'/%3E%3Ctext x='50' y='63' font-size='42' font-family='Georgia,serif' fill='%23fff' text-anchor='middle'%3E48%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -20,36 +20,37 @@
 <body>
 <a class="skip-link" href="#hlavni-obsah">Přeskočit na hlavní obsah</a>
 
-<header class="site-header">
+<header class="site-header site-header--solid">
   <div class="wrap">
     <a href="index.html" class="brand">Pension 48<span>Svatý Petr · Krkonoše</span></a>
-    <nav class="nav-primary" aria-label="Hlavní navigace">
+    <nav class="nav-primary" id="nav-primary" aria-label="Hlavní navigace">
       <a href="index.html#ubytovani">Ubytování</a>
       <a href="index.html#galerie">Galerie</a>
       <a href="index.html#cenik">Ceník</a>
       <a href="index.html#lokalita">Lokalita</a>
       <a href="index.html#kontakt">Kontakt</a>
-      <div class="lang-switch lang-switch-mobile">
-        <a href="terms.html" aria-current="true">CZ</a><span class="sep">|</span>
-        <a href="../de/terms.html">DE</a><span class="sep">|</span>
-        <a href="../en/terms.html">EN</a>
-      </div>
+      <a href="index.html#kontakt" class="btn btn-primary">Poptat pobyt</a>
     </nav>
     <div class="header-actions">
-      <div class="lang-switch">
+      <div class="lang-switch lang-switch--desktop">
         <a href="terms.html" aria-current="true">CZ</a><span class="sep">|</span>
-        <a href="../de/terms.html">DE</a><span class="sep">|</span>
-        <a href="../en/terms.html">EN</a>
+        <a href="../en/terms.html">EN</a><span class="sep">|</span>
+        <a href="../de/terms.html">DE</a>
       </div>
-      <a href="index.html#poptavka" class="btn btn-primary">Poptat ubytování</a>
-      <button class="nav-toggle" aria-label="Otevřít menu" aria-expanded="false">
+      <a href="index.html#kontakt" class="btn btn-primary">Poptat pobyt</a>
+      <div class="lang-switch lang-switch-bar">
+        <a href="terms.html" aria-current="true">CZ</a><span class="sep">|</span>
+        <a href="../en/terms.html">EN</a><span class="sep">|</span>
+        <a href="../de/terms.html">DE</a>
+      </div>
+      <button class="nav-toggle" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-primary">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </header>
 
-<main id="hlavni-obsah">
+<main id="hlavni-obsah" class="page-offset">
   <section class="section">
     <div class="wrap" style="max-width:var(--content-max-narrow);">
       <p class="eyebrow">Právní informace</p>
@@ -82,8 +83,8 @@
       <span>&copy; <span id="year">2026</span> Pension 48. Všechna práva vyhrazena.</span>
       <div class="footer-lang">
         <a href="terms.html" aria-current="true">Čeština</a>
-        <a href="../de/terms.html">Deutsch</a>
         <a href="../en/terms.html">English</a>
+        <a href="../de/terms.html">Deutsch</a>
       </div>
     </div>
   </div>
