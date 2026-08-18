@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" role="img" aria-label="Třílůžkový pokoj">
+  <defs>
+    <linearGradient id="sky-1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6E8C77" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#3B5A48"/>
+    </linearGradient>
+    <pattern id="grain-1" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="4" fill="transparent"/>
+      <circle cx="1" cy="1" r="0.5" fill="#ffffff" opacity="0.03"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="700" fill="url(#sky-1)"/>
+  <g transform="scale(0.75,0.875)" opacity="0.55">
+    <path d="M0,300 L0,230 L90,170 L200,220 L300,110 L400,210 L500,150 L600,230 L700,140 L820,210 L940,130 L1060,220 L1200,190 L1200,300 Z" fill="#6E8C77" opacity="0.55"/>
+    <path d="M0,300 L0,190 L140,130 L240,200 L360,100 L470,220 L580,150 L680,230 L790,160 L900,225 L1020,150 L1140,215 L1200,200 L1200,300 Z" fill="#3B5A48"/>
+  </g>
+  <rect width="900" height="700" fill="url(#grain-1)"/>
+  <rect width="900" height="700" fill="#1c2b23" opacity="0.18"/>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle">
+    <text x="450.0" y="340.0" font-size="38.5" fill="#F5F1E8" font-weight="600">Třílůžkový pokoj</text>
+    <text x="450.0" y="378.0" font-size="19.6" fill="#F5F1E8" opacity="0.75" font-family="Arial, sans-serif" letter-spacing="2">PLACEHOLDER FOTOGRAFIE</text>
+  </g>
+</svg>
