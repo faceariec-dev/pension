@@ -36,7 +36,7 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
 
-      - name: Nahrát web (rsync přes SSH, bez mazání cizích souborů)
+      - name: Nahrát web (rsync po SSH, jinak SFTP přes lftp; bez mazání cizích souborů)
         env:
           HOST: ${{ secrets.SSH_HOST }}
           PORT: ${{ secrets.SSH_PORT }}
@@ -44,11 +44,24 @@ jobs:
           TARGET: ${{ secrets.DEPLOY_PATH }}
           SITE_BASE: ${{ vars.SITE_BASE }}
         run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p ${PORT:-22} -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts"
+          PORT="${PORT:-22}"
+          SSHOPTS="-i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o BatchMode=yes"
           # Test v podsložce: kořenový .htaccess nenahrávat (přesměrování by mířila na kořen domény).
-          EXTRA=''
-          if [ -n "$SITE_BASE" ]; then EXTRA="--exclude=/.htaccess"; fi
-          # 1) Soubory webu. Bez --delete: nic mimo web (WordPress, poptavka-config.php) se nemaže ani nepřepisuje.
-          rsync -rltvz --checksum --exclude='poptavka-config*.php' $EXTRA -e "$SSH" dist/ "$USER@$HOST:$TARGET/"
-          # 2) Jen složka _astro (hashované soubory webu): staré verze se smažou.
-          rsync -rltvz --checksum --delete -e "$SSH" dist/_astro/ "$USER@$HOST:$TARGET/_astro/"
+          SKIP_HTACCESS=0
+          if [ -n "$SITE_BASE" ]; then SKIP_HTACCESS=1; fi
+
+          if ssh $SSHOPTS "$USER@$HOST" "rsync --version" >/dev/null 2>&1; then
+            echo "Nahrávám přes rsync"
+            EXTRA=''
+            if [ "$SKIP_HTACCESS" = 1 ]; then EXTRA="--exclude=/.htaccess"; fi
+            # 1) Soubory webu. Bez --delete: nic mimo web (WordPress, poptavka-config.php) se nemaže ani nepřepisuje.
+            rsync -rltvz --checksum --exclude='poptavka-config*.php' $EXTRA -e "ssh $SSHOPTS" dist/ "$USER@$HOST:$TARGET/"
+            # 2) Jen složka _astro (hashované soubory webu): staré verze se smažou.
+            rsync -rltvz --checksum --delete -e "ssh $SSHOPTS" dist/_astro/ "$USER@$HOST:$TARGET/_astro/"
+          else
+            echo "rsync na serveru není, nahrávám přes SFTP (lftp)"
+            sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+            EXCL="--exclude-glob poptavka-config*.php"
+            if [ "$SKIP_HTACCESS" = 1 ]; then EXCL="$EXCL --exclude ^\\.htaccess$"; fi
+            lftp -e "set sftp:connect-program 'ssh $SSHOPTS'; set cmd:fail-exit yes; set net:max-retries 3; open sftp://$USER@$HOST; mirror -R --parallel=4 $EXCL dist/ $TARGET/; mirror -R --delete --parallel=4 dist/_astro $TARGET/_astro; bye"
+          fi

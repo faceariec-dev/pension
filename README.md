@@ -40,7 +40,7 @@ SMTP heslo **není v repozitáři**. Postup:
 Workflow `.github/workflows/deploy.yml` se spustí při každém pushi do `main` (nebo ručně: Actions → *Deploy na Forpsi* → *Run workflow*): `npm ci` → `npm run build` → `rsync` složky `dist/` na server po SSH.
 
 - `rsync` běží **bez `--delete`** pro celý web, takže nic cizího (WordPress, `poptavka-config.php`) nesmaže ani nepřepíše. Pouze složka `_astro/` (hashované soubory webu) se synchronizuje se smazáním starých verzí.
-- Pokud by na serveru `rsync` nebyl, nahraďte krok nasazení SFTP (např. akce `SamKirkland/FTP-Deploy-Action` s protokolem sftp, případně `lftp`).
+- Pokud na serveru `rsync` není (nebo SSH nemá shell), workflow to pozná a nahraje web přes SFTP (`lftp`) se stejnými pravidly.
 
 ### Nejdřív testovací nasazení na test.pension48.cz
 
