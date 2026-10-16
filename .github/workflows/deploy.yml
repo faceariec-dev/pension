@@ -50,7 +50,16 @@ jobs:
           SKIP_HTACCESS=0
           if [ -n "$SITE_BASE" ]; then SKIP_HTACCESS=1; fi
 
-          if ssh $SSHOPTS "$USER@$HOST" "rsync --version" >/dev/null 2>&1; then
+          # Zkouška přihlášení klíčem. Odmítnutý klíč = chyba hned; jiné selhání (třeba jen SFTP bez shellu) = SFTP.
+          if ssh $SSHOPTS "$USER@$HOST" "rsync --version" >/tmp/probe.out 2>/tmp/probe.err; then HAS_RSYNC=1; else HAS_RSYNC=0; fi
+          if grep -qi "permission denied" /tmp/probe.err; then
+            echo "::error::Server odmítl SSH klíč (Permission denied). Zkontrolujte: veřejný klíč nahraný v administraci Forpsi (SSH), SSH_USER, SSH_PORT a formát SSH_PRIVATE_KEY (OpenSSH, celý, včetně BEGIN/END)."
+            cat /tmp/probe.err
+            exit 1
+          fi
+          cat /tmp/probe.err || true
+
+          if [ "$HAS_RSYNC" = 1 ]; then
             echo "Nahrávám přes rsync"
             EXTRA=''
             if [ "$SKIP_HTACCESS" = 1 ]; then EXTRA="--exclude=/.htaccess"; fi
@@ -63,5 +72,5 @@ jobs:
             sudo apt-get update -qq && sudo apt-get install -y -qq lftp
             EXCL="--exclude-glob poptavka-config*.php"
             if [ "$SKIP_HTACCESS" = 1 ]; then EXCL="$EXCL --exclude ^\\.htaccess$"; fi
-            lftp -e "set sftp:connect-program 'ssh $SSHOPTS'; set cmd:fail-exit yes; set net:max-retries 3; open sftp://$USER@$HOST; mirror -R --parallel=4 $EXCL dist/ $TARGET/; mirror -R --delete --parallel=4 dist/_astro $TARGET/_astro; bye"
+            lftp -e "set sftp:connect-program 'ssh $SSHOPTS'; set cmd:fail-exit yes; set net:max-retries 3; open -p $PORT -u \"$USER,x\" sftp://$HOST; mirror -R --parallel=4 $EXCL dist/ $TARGET/; mirror -R --delete --parallel=4 dist/_astro $TARGET/_astro; bye"
           fi
