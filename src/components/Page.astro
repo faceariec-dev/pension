@@ -83,7 +83,7 @@ const clientCfg = {
           </div>
         </div>
         <figure>
-          <Pic name="hero-zima-dum" alt={d.hero.alt} widths={[480, 768, 1024]} sizes="(max-width: 860px) 92vw, 560px" eager />
+          <Pic name="zima-dum" alt={d.hero.alt} widths={[480, 768, 1024]} sizes="(max-width: 860px) 92vw, 560px" eager />
           <Pic name="leto-dum" alt={d.hero.altInset} class="inset" widths={[320, 480]} sizes="(max-width: 860px) 34vw, 220px" />
         </figure>
       </div>
@@ -301,8 +301,8 @@ const clientCfg = {
             <input type="hidden" name="estimate" id="f-estimate" value="" />
             <input type="hidden" name="ts" id="f-ts" value="" />
             <div class="hp" aria-hidden="true"><label>Web<input type="text" name="web" tabindex="-1" autocomplete="off" /></label></div>
-            <label><span>{d.form.from} *</span><input id="f-from" name="arrival" type="date" required /></label>
-            <label><span>{d.form.to} *</span><input id="f-to" name="departure" type="date" required /></label>
+            <label><span>{d.form.from} *</span><input id="f-from" aria-describedby="f-err" name="arrival" type="date" required /></label>
+            <label><span>{d.form.to} *</span><input id="f-to" aria-describedby="f-err" name="departure" type="date" required /></label>
             <label><span>{d.form.adults}</span><input id="f-adults" name="adults" type="number" inputmode="numeric" min="1" max={pricing.maxAdults} value="2" /></label>
             <label><span>{d.form.kids}</span><input id="f-kids" name="kids" type="number" inputmode="numeric" min="0" max={pricing.maxKids} value="0" /></label>
             <label class="full"><span>{d.form.dog}</span>
@@ -313,10 +313,10 @@ const clientCfg = {
               </select>
             </label>
             <div class="full calc" id="calc" aria-live="polite"></div>
-            <label><span>{d.form.fn} *</span><input id="f-fn" name="first_name" autocomplete="given-name" required /></label>
+            <label><span>{d.form.fn} *</span><input id="f-fn" aria-describedby="f-err" name="first_name" autocomplete="given-name" required /></label>
             <label><span>{d.form.ln}</span><input id="f-ln" name="last_name" autocomplete="family-name" /></label>
-            <label><span>{d.form.tel}</span><input id="f-tel" name="phone" type="tel" autocomplete="tel" /></label>
-            <label><span>{d.form.mail}</span><input id="f-mail" name="email" type="email" autocomplete="email" /></label>
+            <label><span>{d.form.tel}</span><input id="f-tel" aria-describedby="f-err" name="phone" type="tel" autocomplete="tel" /></label>
+            <label><span>{d.form.mail}</span><input id="f-mail" aria-describedby="f-err" name="email" type="email" autocomplete="email" /></label>
             <label class="full"><span>{d.form.msg}</span><textarea id="f-msg" name="message" rows="4"></textarea></label>
             <p class="full err" id="f-err" role="alert" hidden></p>
             <div class="full frow">
@@ -340,7 +340,11 @@ const clientCfg = {
 
   <footer>
     <div class="wrap">
-      <span>Pension 48 · {site.street}, {site.zip} {site.city}</span>
+      <address class="foot" style="font-style:normal">
+        <span>Pension 48 · {site.street}, {site.zip} {site.city}</span>
+        <a href={tel(site.phone1)}>{site.phone1}</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </address>
       <span>{d.footer.rights}</span>
     </div>
   </footer>

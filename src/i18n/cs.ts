@@ -15,12 +15,12 @@ const cs = {
   nav: { about: 'O penzionu', rooms: 'Ubytování', gallery: 'Galerie', surroundings: 'Okolí', offers: 'Nabídky', prices: 'Ceník', contact: 'Kontakt' },
   hero: {
     eye: 'Svatý Petr · Špindlerův Mlýn · Krkonoše',
-    h1a: 'Ubytování pod ',
-    h1em: 'Kozími hřbety',
-    p: 'Rodinný penzion v klidné části údolí Svatý Petr s výhledem na Kozí hřbety, Stoh a Pláně. Sjezdovka 300 m, restaurace a snowtubing hned vedle.',
+    h1a: 'Ubytování ve Špindlerově\u00a0Mlýně ',
+    h1em: 'pod Kozími hřbety',
+    p: 'Rodinný penzion ve Svatém Petru, v klidné části údolí s výhledem na Kozí hřbety, Stoh a Pláně. Sjezdovka 300 m, restaurace a snowtubing hned vedle.',
     cta: 'Poptat termín',
     cta2: 'Prohlédnout pokoje',
-    alt: 'Pension 48 v zimě, v pozadí zasněžené hory',
+    alt: 'Penzion Pension 48 ve Svatém Petru ve Špindlerově Mlýně v zimě, v pozadí zasněžené Krkonoše',
     altInset: 'Pension 48 v létě',
   },
   facts: [

@@ -10,7 +10,7 @@ export default defineConfig({
   build: { format: 'directory' },
   integrations: [
     sitemap({
-      i18n: { defaultLocale: 'cs', locales: { cs: 'cs-CZ', en: 'en', de: 'de' } },
+      i18n: { defaultLocale: 'cs', locales: { cs: 'cs', en: 'en', de: 'de' } },
       filter: (page) => !page.includes('/404'),
     }),
   ],

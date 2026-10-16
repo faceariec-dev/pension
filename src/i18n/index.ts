@@ -13,4 +13,5 @@ export const quotes: { name: string; via?: 'en' | 'de' | 'sk'; text: string }[] 
   { name: 'Diana', via: 'de', text: 'Byli jsme zde potřetí na dva týdny. Tak se nám tu líbilo, že si to zarezervujeme znovu i příští rok. Skvělé ubytování a milá rodina.' },
   { name: 'Kristýna V.', text: 'Útulný a čistý pension, kde najdete vše, co potřebujete ke spokojenému pobytu. Vybavená kuchyňka, sociální zařízení na pokoji, soukromí a krásné výhledy z okna.' },
   { name: 'Roland O.', via: 'sk', text: 'Pěkný a útulný penzion, super pokoje s vlastními WC a sprchami, lze opékat či zapůjčit gril, pěkný výhled na okolní přírodu.' },
+  { name: 'Miroslav Š.', text: 'Klidný penzion rodinného typu uprostřed Svatého Petra, obsluha na výbornou.' },
 ];

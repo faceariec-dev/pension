@@ -7,7 +7,7 @@ const en: Dict = {
   meta: {
     title: 'Accommodation in Špindlerův Mlýn – Pension 48, Svatý Petr',
     description:
-      'Family-run guesthouse in Svatý Petr, Špindlerův Mlýn (Giant Mountains): 18 beds, ski slope 300 m away, free WiFi and parking. Prices, rooms and a non-binding enquiry.',
+      'Family-run guesthouse in Svatý Petr, Špindlerův Mlýn: 18 beds, ski slope 300 m away, free WiFi and parking. Prices, rooms and a non-binding enquiry.',
   },
   tagline: 'Accommodation in Špindlerův Mlýn',
   skip: 'Skip to content',
@@ -17,12 +17,12 @@ const en: Dict = {
   nav: { about: 'About', rooms: 'Rooms', gallery: 'Gallery', surroundings: 'Surroundings', offers: 'Offers', prices: 'Prices', contact: 'Contact' },
   hero: {
     eye: 'Svatý Petr · Špindlerův Mlýn · Giant Mountains',
-    h1a: 'Stay below the ',
-    h1em: 'Kozí hřbety',
-    p: 'A family-run guesthouse in the quiet part of the Svatý Petr valley, looking out on Kozí hřbety, Stoh and Pláně. The ski slope is 300 m away, with restaurants and snow tubing right next door.',
+    h1a: 'Accommodation in Špindlerův\u00a0Mlýn ',
+    h1em: 'below Kozí hřbety',
+    p: 'A family-run guesthouse in Svatý Petr, in the quiet part of the valley, looking out on Kozí hřbety, Stoh and Pláně. The ski slope is 300 m away, with restaurants and snow tubing right next door.',
     cta: 'Check availability',
     cta2: 'See the rooms',
-    alt: 'Pension 48 in winter with snowy mountains behind',
+    alt: 'Pension 48 in Svatý Petr, Špindlerův Mlýn, in winter with the snowy Giant Mountains behind',
     altInset: 'Pension 48 in summer',
   },
   facts: [

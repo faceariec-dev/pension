@@ -5,9 +5,9 @@ const de: Dict = {
   locale: 'de-DE',
   ogLocale: 'de_DE',
   meta: {
-    title: 'Unterkunft Špindlerův Mlýn (Spindlermühle) – Pension 48, Svatý Petr',
+    title: 'Unterkunft Špindlerův Mlýn – Pension 48 in Svatý Petr',
     description:
-      'Familiengeführte Pension in Svatý Petr, Špindlerův Mlýn (Riesengebirge): 18 Betten, Skipiste 300 m, WLAN und Parken gratis. Preise, Zimmer und unverbindliche Anfrage.',
+      'Familiengeführte Pension in Svatý Petr, Špindlerův Mlýn: 18 Betten, Skipiste 300 m, WLAN und Parken gratis. Preise, Zimmer und unverbindliche Anfrage.',
   },
   tagline: 'Unterkunft in Špindlerův Mlýn',
   skip: 'Zum Inhalt springen',
@@ -17,12 +17,12 @@ const de: Dict = {
   nav: { about: 'Über uns', rooms: 'Zimmer', gallery: 'Galerie', surroundings: 'Umgebung', offers: 'Angebote', prices: 'Preise', contact: 'Kontakt' },
   hero: {
     eye: 'Svatý Petr · Špindlerův Mlýn · Riesengebirge',
-    h1a: 'Übernachten unter den ',
-    h1em: 'Kozí hřbety',
-    p: 'Familiengeführte Pension im ruhigen Teil des Tals Svatý Petr mit Blick auf Kozí hřbety, Stoh und Pláně. Die Skipiste ist 300 m entfernt, Restaurants und Snowtubing liegen gleich nebenan.',
+    h1a: 'Unterkunft in Špindlerův\u00a0Mlýn ',
+    h1em: 'unter den Kozí hřbety',
+    p: 'Familiengeführte Pension in Svatý Petr, im ruhigen Teil des Tals mit Blick auf Kozí hřbety, Stoh und Pláně. Die Skipiste ist 300 m entfernt, Restaurants und Snowtubing liegen gleich nebenan.',
     cta: 'Termin anfragen',
     cta2: 'Zimmer ansehen',
-    alt: 'Pension 48 im Winter mit verschneiten Bergen im Hintergrund',
+    alt: 'Pension 48 in Svatý Petr, Špindlerův Mlýn, im Winter mit dem verschneiten Riesengebirge im Hintergrund',
     altInset: 'Pension 48 im Sommer',
   },
   facts: [
