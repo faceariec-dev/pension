@@ -1,0 +1,30 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  name: string;
+  alt: string;
+  widths?: number[];
+  sizes: string;
+  class?: string;
+  eager?: boolean;
+}
+const { name, alt, widths = [400, 640, 1024], sizes, class: cls, eager = false } = Astro.props;
+const all = import.meta.glob<{ default: ImageMetadata }>('/src/assets/photos/*.jpg', { eager: true });
+const img = all[`/src/assets/photos/${name}.jpg`]?.default;
+if (!img) throw new Error(`Photo not found: ${name}`);
+---
+
+<Picture
+  src={img}
+  alt={alt}
+  formats={['avif', 'webp']}
+  fallbackFormat="jpeg"
+  widths={widths.filter((x) => x <= img.width)}
+  sizes={sizes}
+  class={cls}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding={eager ? 'sync' : 'async'}
+  fetchpriority={eager ? 'high' : undefined}
+/>

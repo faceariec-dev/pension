@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.astro/
+poptavka-config.php
+.env
+*.log

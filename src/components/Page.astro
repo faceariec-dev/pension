@@ -1,0 +1,354 @@
+---
+import Base from '../layouts/Base.astro';
+import Pic from './Pic.astro';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { site, tel, langs, type Lang } from '../config/site';
+import { pricing } from '../config/pricing';
+import { t, quotes } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+const kc = (n: number) => n.toLocaleString('cs-CZ').replace(/\s/g, ' ') + ' Kč';
+const range = (p: { min: number; max: number }) => `${p.min.toLocaleString('cs-CZ').replace(/\s/g, ' ')}–${kc(p.max)}`;
+
+const galleryPhotos = [
+  'zima-udoli', 'zima-dum', 'leto-dum', 'leto-zahrada', 'spolecenska-mistnost',
+  'kuchynka', 'pokoj-tv', 'zima-vyhled', 'koupelna',
+];
+const all = import.meta.glob<{ default: ImageMetadata }>('/src/assets/photos/*.jpg', { eager: true });
+const full = await Promise.all(
+  galleryPhotos.map(async (n) => {
+    const src = all[`/src/assets/photos/${n}.jpg`].default;
+    return (await getImage({ src, width: Math.min(1024, src.width), format: 'webp' })).src;
+  }),
+);
+
+const ids = { about: 'o-nas', rooms: 'ubytovani', gallery: 'galerie', surroundings: 'okoli', offers: 'nabidky', prices: 'cenik', contact: 'kontakt' } as const;
+const navKeys = Object.keys(ids) as (keyof typeof ids)[];
+const roomPhotos = ['pokoj-dvoululkovy', 'pokoj-ctyrluzkovy', 'apartman'];
+const scores = [
+  { key: 'google', name: 'Google', v: '4,2', of: '5', href: site.reviewLinks.google },
+  { key: 'booking', name: 'Booking.com', v: '8,5', of: '10', href: site.reviewLinks.booking },
+  { key: 'tripadvisor', name: 'Tripadvisor', v: '4,5', of: '5', href: site.reviewLinks.tripadvisor },
+  { key: 'echalupy', name: 'e-chalupy.cz', v: '4,9', of: '5', href: site.reviewLinks.echalupy },
+] as const;
+
+const clientCfg = {
+  pricing,
+  calc: d.calc,
+  form: { invalid: d.form.invalid, order: d.form.order, err: d.form.err, sending: d.form.sending, send: d.form.send },
+  interested: d.offers.interested,
+  lang,
+};
+---
+
+<Base lang={lang}>
+  <a class="skip" href="#top">{d.skip}</a>
+  <header class="top">
+    <div class="wrap">
+      <a class="logo" href={langs[lang].path + '#top'}>
+        <b>Pension <i>48</i></b><small>{d.tagline}</small>
+      </a>
+      <nav class="main" aria-label={d.menu}>
+        {navKeys.map((k) => <a class="lnk" href={`#${ids[k]}`}>{d.nav[k]}</a>)}
+        <div class="lang" role="group" aria-label={d.langLabel}>
+          {(Object.keys(langs) as Lang[]).map((l) => (
+            <a href={langs[l].path} hreflang={langs[l].hreflang} lang={l} aria-current={l === lang ? 'true' : undefined}>{langs[l].label}</a>
+          ))}
+        </div>
+        <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mnav" aria-label={d.menu}><i></i><i></i><i></i></button>
+      </nav>
+    </div>
+    <nav class="mnav" id="mnav" aria-label={d.menu} hidden>
+      <div class="wrap">
+        {navKeys.map((k) => <a class="lnk" href={`#${ids[k]}`}>{d.nav[k]}</a>)}
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <div class="txt">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.hero.eye}</span></div>
+          <h1>{d.hero.h1a}<em>{d.hero.h1em}</em></h1>
+          <p class="lead">{d.hero.p}</p>
+          <div class="ctas">
+            <a class="btn" href="#kontakt">{d.hero.cta}</a>
+            <a class="btn ghost" href="#ubytovani">{d.hero.cta2}</a>
+          </div>
+        </div>
+        <figure>
+          <Pic name="hero-zima-dum" alt={d.hero.alt} widths={[480, 768, 1024]} sizes="(max-width: 860px) 92vw, 560px" eager />
+          <Pic name="leto-dum" alt={d.hero.altInset} class="inset" widths={[320, 480]} sizes="(max-width: 860px) 34vw, 220px" />
+        </figure>
+      </div>
+      <svg class="ridges" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+        <path class="r1" d="M0 60 L140 30 L300 55 L470 18 L640 50 L800 22 L980 52 L1150 26 L1300 48 L1440 30 V120 H0Z"></path>
+        <path class="r2" d="M0 85 L220 60 L460 82 L700 58 L940 84 L1180 62 L1440 80 V120 H0Z"></path>
+        <path class="r3" d="M0 105 L300 92 L600 104 L900 90 L1200 103 L1440 95 V120 H0Z"></path>
+      </svg>
+    </section>
+
+    <div class="facts">
+      <div class="wrap">
+        {d.facts.map((f) => <div><strong>{f.v}</strong><span>{f.t}</span></div>)}
+      </div>
+    </div>
+
+    <section id="o-nas">
+      <div class="wrap about">
+        <div class="txt">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.about.eye}</span></div>
+          <h2>{d.about.h}</h2>
+          <p>{d.about.p}</p>
+        </div>
+        <div class="amen">
+          {d.about.amen.map((a) => <div><b>{a.b}</b><span>{a.s}</span></div>)}
+        </div>
+      </div>
+    </section>
+
+    <section id="ubytovani" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.rooms.eye}</span></div>
+          <h2>{d.rooms.h}</h2>
+          <p>{d.rooms.p}</p>
+        </div>
+        <div class="rooms">
+          {d.rooms.items.map((r, i) => (
+            <article class="room">
+              <Pic name={roomPhotos[i]} alt={r.alt} widths={[400, 640, 800]} sizes="(max-width: 860px) 92vw, 370px" />
+              <div class="body">
+                <span class="count">{r.n}</span>
+                <h3>{r.h}</h3>
+                <p>{r.p}</p>
+                <div class="meta">{r.chips.map((c) => <span class="chip">{c}</span>)}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="galerie" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.gallery.eye}</span></div>
+          <h2>{d.gallery.h}</h2>
+        </div>
+        <div class="gal">
+          {galleryPhotos.map((n, i) => (
+            <button type="button" class:list={['g', { big: i === 0 }]} data-g={i} data-full={full[i]} data-cap={d.gallery.captions[i]}>
+              <Pic name={n} alt={d.gallery.captions[i]} widths={i === 0 ? [480, 800] : [320, 480]} sizes={i === 0 ? '(max-width: 640px) 92vw, 560px' : '(max-width: 640px) 46vw, 270px'} />
+              <span aria-hidden="true">{d.gallery.captions[i]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="recenze" style="padding-top:0">
+      <div class="wrap rev">
+        <div class="rev-score">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.reviews.eye}</span></div>
+          <div class="scores">
+            {scores.map((s) => (
+              <a class="score" href={s.href} target="_blank" rel="noopener noreferrer">
+                <strong>{s.v}<small>/{s.of}</small></strong>
+                <span><b>{s.name}</b><span>{d.reviews.count[s.key]}</span><span class="open">{d.reviews.open} ↗</span></span>
+              </a>
+            ))}
+          </div>
+          <p class="note">{d.reviews.note}</p>
+        </div>
+        <div class="rev-list">
+          <h2>{d.reviews.h}</h2>
+          <div class="quotes">
+            {quotes.map((q) => (
+              <figure class="q">
+                <blockquote lang="cs">„{q.text}“</blockquote>
+                <figcaption><b>{q.name}</b><span>Google{q.via ? ` · ${d.reviews.via[q.via]}` : ''}</span></figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="okoli" class="seasons">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.seasons.eye}</span></div>
+          <h2>{d.seasons.h}</h2>
+        </div>
+        <div class="sgrid">
+          <div class="scard">
+            <Pic name="zima-vyhled" alt={d.seasons.altWinter} class="simg" widths={[400, 640, 800]} sizes="(max-width: 900px) 92vw, 360px" />
+            <h3><span class="blaze" style="--c:var(--amber)"></span><span>{d.seasons.winter}</span></h3>
+            <ul>{d.seasons.w.map((x) => <li><span class="blaze" style="--c:var(--amber)"></span><span>{x}</span></li>)}</ul>
+          </div>
+          <div class="post" role="group" aria-label={d.seasons.postLabel}>
+            <div class="top-plate">Pension 48<small>{d.seasons.alt}</small></div>
+            <div class="plates">
+              {d.seasons.plates.map((p, i) => (
+                <div class:list={['plate', { left: i % 2 === 1 }]}><b>{p.t}</b><span>{p.d}</span></div>
+              ))}
+            </div>
+            <div class="pole"></div>
+            <a class="maplink" href={site.mapy} target="_blank" rel="noopener noreferrer">{d.seasons.map}</a>
+          </div>
+          <div class="scard">
+            <Pic name="leto-hriste" alt={d.seasons.altSummer} class="simg" widths={[400, 640, 800]} sizes="(max-width: 900px) 92vw, 360px" />
+            <h3><span class="blaze" style="--c:var(--amber)"></span><span>{d.seasons.summer}</span></h3>
+            <ul>{d.seasons.s.map((x) => <li><span class="blaze" style="--c:var(--amber)"></span><span>{x}</span></li>)}</ul>
+          </div>
+        </div>
+        <div class="useful">
+          <h3>{d.links.h}</h3>
+          <div class="ul-grid">
+            {d.links.items.map((l) => (
+              <a href={l.u} target="_blank" rel="noopener noreferrer"><b>{l.b}</b><span>{l.d} ↗</span></a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="nabidky">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.offers.eye}</span></div>
+          <h2>{d.offers.h}</h2>
+        </div>
+        <div class="offers">
+          {d.offers.items.map((o) => (
+            <article>
+              <span class="tag">{o.tag}</span>
+              <h3>{o.h}</h3>
+              <p>{o.p}</p>
+              <button type="button" class="btn ghost" data-offer={o.h}>{d.offers.btn}</button>
+            </article>
+          ))}
+        </div>
+        <p class="note">{d.offers.note}</p>
+      </div>
+    </section>
+
+    <section id="cenik">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.prices.eye}</span></div>
+          <h2>{d.prices.h}</h2>
+          <p>{d.prices.seasonNote}</p>
+        </div>
+        <div class="pgrid">
+          <div class="price-wrap">
+            <table>
+              <thead><tr><th>{d.prices.th1}</th><th>{d.prices.th2}</th></tr></thead>
+              <tbody>
+                <tr><td>{d.prices.winter}</td><td class="num">{range(pricing.winter)}</td></tr>
+                <tr><td>{d.prices.summer}</td><td class="num">{range(pricing.summer)}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <dl class="terms">
+            {d.prices.terms.map((x) => <div><dt>{x.b}</dt><dd>{x.s}</dd></div>)}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="dotazy" style="padding-top:0">
+      <div class="wrap faq">
+        <div class="sec-head">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.faq.eye}</span></div>
+          <h2>{d.faq.h}</h2>
+        </div>
+        <div class="faq-list">
+          {d.faq.items.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}{f.todo && <> <em class="todo">{d.faq.todo}</em></>}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.contact.eye}</span></div>
+          <h2>{d.contact.h}</h2>
+          <p>{d.contact.p}</p>
+        </div>
+        <div class="enq">
+          <div class="contact">
+            <dl>
+              <dt>{d.contact.tel}</dt><dd><a href={tel(site.phone1)}>{site.phone1}</a></dd>
+              <dt>{d.contact.mob}</dt><dd><a href={tel(site.phone2)}>{site.phone2}</a></dd>
+              <dt>E-mail</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+              <dt>{d.contact.addr}</dt><dd>{site.street}<br />{site.zip} {site.city}</dd>
+              <dt>{d.contact.op}</dt><dd class="small">{site.operator}, IČO {site.ico}</dd>
+            </dl>
+          </div>
+          <form id="enq" action="/poptavka.php" method="post" novalidate>
+            <input type="hidden" name="lang" value={lang} />
+            <input type="hidden" name="estimate" id="f-estimate" value="" />
+            <input type="hidden" name="ts" id="f-ts" value="" />
+            <div class="hp" aria-hidden="true"><label>Web<input type="text" name="web" tabindex="-1" autocomplete="off" /></label></div>
+            <label><span>{d.form.from} *</span><input id="f-from" name="arrival" type="date" required /></label>
+            <label><span>{d.form.to} *</span><input id="f-to" name="departure" type="date" required /></label>
+            <label><span>{d.form.adults}</span><input id="f-adults" name="adults" type="number" inputmode="numeric" min="1" max={pricing.maxAdults} value="2" /></label>
+            <label><span>{d.form.kids}</span><input id="f-kids" name="kids" type="number" inputmode="numeric" min="0" max={pricing.maxKids} value="0" /></label>
+            <label class="full"><span>{d.form.dog}</span>
+              <select id="f-dog" name="dog">
+                <option value="none">{d.form.dog0}</option>
+                <option value="small">{d.form.dog1} (+{kc(pricing.dog.small)}/{d.calc.nights.one})</option>
+                <option value="large">{d.form.dog2} (+{kc(pricing.dog.large)}/{d.calc.nights.one})</option>
+              </select>
+            </label>
+            <div class="full calc" id="calc" aria-live="polite"></div>
+            <label><span>{d.form.fn} *</span><input id="f-fn" name="first_name" autocomplete="given-name" required /></label>
+            <label><span>{d.form.ln}</span><input id="f-ln" name="last_name" autocomplete="family-name" /></label>
+            <label><span>{d.form.tel}</span><input id="f-tel" name="phone" type="tel" autocomplete="tel" /></label>
+            <label><span>{d.form.mail}</span><input id="f-mail" name="email" type="email" autocomplete="email" /></label>
+            <label class="full"><span>{d.form.msg}</span><textarea id="f-msg" name="message" rows="4"></textarea></label>
+            <p class="full err" id="f-err" role="alert" hidden></p>
+            <div class="full frow">
+              <span class="note">{d.form.note}</span>
+              <button class="btn" type="submit" id="f-submit">{d.form.send}</button>
+            </div>
+            <div class="full fstatus ok" id="f-done" role="status" tabindex="-1" hidden><b>{d.form.okTitle}</b> {d.form.ok}</div>
+            <p class="full gdpr">{d.form.gdpr}</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label={d.gallery.label}>
+    <button type="button" class="lb-x" id="lb-x" aria-label={d.gallery.close}>×</button>
+    <button type="button" id="lb-prev" aria-label={d.gallery.prev}>‹</button>
+    <figure><img id="lb-img" alt="" /><figcaption id="lb-cap"></figcaption></figure>
+    <button type="button" id="lb-next" aria-label={d.gallery.next}>›</button>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <span>Pension 48 · {site.street}, {site.zip} {site.city}</span>
+      <span>{d.footer.rights}</span>
+    </div>
+  </footer>
+
+  <script type="application/json" id="cfg" set:html={JSON.stringify(clientCfg)} />
+  <script>
+    import '../scripts/main.ts';
+  </script>
+</Base>

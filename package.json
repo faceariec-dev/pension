@@ -1,0 +1,29 @@
+{
+  "name": "pension48-web",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "assets": "node scripts/make-assets.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faceariec-dev/pension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/faceariec-dev/pension/issues"
+  },
+  "homepage": "https://github.com/faceariec-dev/pension#readme",
+  "devDependencies": {
+    "astro": "^5.18.2",
+    "sharp": "^0.35.5"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/figtree": "^5.3.0"
+  },
+  "private": true,
+  "type": "module"
+}
