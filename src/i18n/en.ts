@@ -11,6 +11,7 @@ const en: Dict = {
   },
   tagline: 'Accommodation in Špindlerův Mlýn',
   skip: 'Skip to content',
+  toTop: 'Back to top',
   menu: 'Menu',
   langLabel: 'Language',
   nav: { about: 'About', rooms: 'Rooms', gallery: 'Gallery', surroundings: 'Surroundings', offers: 'Offers', prices: 'Prices', contact: 'Contact' },

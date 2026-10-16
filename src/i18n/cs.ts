@@ -9,6 +9,7 @@ const cs = {
   },
   tagline: 'Ubytování Špindlerův Mlýn',
   skip: 'Přeskočit na obsah',
+  toTop: 'Zpět nahoru',
   menu: 'Menu',
   langLabel: 'Jazyk',
   nav: { about: 'O penzionu', rooms: 'Ubytování', gallery: 'Galerie', surroundings: 'Okolí', offers: 'Nabídky', prices: 'Ceník', contact: 'Kontakt' },

@@ -87,11 +87,9 @@ const clientCfg = {
           <Pic name="leto-dum" alt={d.hero.altInset} class="inset" widths={[320, 480]} sizes="(max-width: 860px) 34vw, 220px" />
         </figure>
       </div>
-      <svg class="ridges" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-        <path class="r1" d="M0 60 L140 30 L300 55 L470 18 L640 50 L800 22 L980 52 L1150 26 L1300 48 L1440 30 V120 H0Z"></path>
-        <path class="r2" d="M0 85 L220 60 L460 82 L700 58 L940 84 L1180 62 L1440 80 V120 H0Z"></path>
-        <path class="r3" d="M0 105 L300 92 L600 104 L900 90 L1200 103 L1440 95 V120 H0Z"></path>
-      </svg>
+      <div class="hero-band" aria-hidden="true">
+        <Pic name="zima-vyhled" alt="" widths={[640, 1024]} sizes="100vw" />
+      </div>
     </section>
 
     <div class="facts">
@@ -100,7 +98,7 @@ const clientCfg = {
       </div>
     </div>
 
-    <section id="o-nas">
+    <section id="o-nas" class="band-w">
       <div class="wrap about">
         <div class="txt">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.about.eye}</span></div>
@@ -113,7 +111,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="ubytovani" style="padding-top:0">
+    <section id="ubytovani" class="band-s">
       <div class="wrap">
         <div class="sec-head">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.rooms.eye}</span></div>
@@ -136,7 +134,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="galerie" style="padding-top:0">
+    <section id="galerie" class="band-w">
       <div class="wrap">
         <div class="sec-head">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.gallery.eye}</span></div>
@@ -153,7 +151,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="recenze" style="padding-top:0">
+    <section id="recenze" class="band-s">
       <div class="wrap rev">
         <div class="rev-score">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.reviews.eye}</span></div>
@@ -181,7 +179,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="okoli" class="seasons">
+    <section id="okoli" class="band-w">
       <div class="wrap">
         <div class="sec-head">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.seasons.eye}</span></div>
@@ -220,7 +218,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="nabidky">
+    <section id="nabidky" class="band-s">
       <div class="wrap">
         <div class="sec-head">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.offers.eye}</span></div>
@@ -240,7 +238,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="cenik">
+    <section id="cenik" class="band-w">
       <div class="wrap">
         <div class="sec-head">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.prices.eye}</span></div>
@@ -264,7 +262,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="dotazy" style="padding-top:0">
+    <section id="dotazy" class="band-s">
       <div class="wrap faq">
         <div class="sec-head">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.faq.eye}</span></div>
@@ -281,7 +279,7 @@ const clientCfg = {
       </div>
     </section>
 
-    <section id="kontakt" style="padding-top:0">
+    <section id="kontakt" class="band-w">
       <div class="wrap">
         <div class="sec-head">
           <div class="eyebrow"><span class="blaze" style="--c:var(--amber)"></span><span>{d.contact.eye}</span></div>
@@ -346,6 +344,10 @@ const clientCfg = {
       <span>{d.footer.rights}</span>
     </div>
   </footer>
+
+  <button type="button" class="totop" id="totop" aria-label={d.toTop} hidden>
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V6M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  </button>
 
   <script type="application/json" id="cfg" set:html={JSON.stringify(clientCfg)} />
   <script>

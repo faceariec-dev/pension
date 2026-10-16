@@ -65,6 +65,18 @@ window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('resize', onScroll);
 spy();
 
+/* ---------- back to top ---------- */
+const totop = $('totop');
+const toggleTop = () => {
+  totop.hidden = window.scrollY < 700;
+};
+window.addEventListener('scroll', toggleTop, { passive: true });
+totop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+  setTimeout(() => $('menu-btn').focus({ preventScroll: true }), reduced ? 0 : 400);
+});
+toggleTop();
+
 /* ---------- gallery lightbox ---------- */
 const G = [...document.querySelectorAll<HTMLButtonElement>('.g[data-g]')];
 const lb = $('lb');
