@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_mail/
+
+Sitemap: https://www.pension48.cz/sitemap-index.xml

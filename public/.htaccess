@@ -1,0 +1,57 @@
+# Pension 48 – Apache (Forpsi)
+DirectoryIndex index.html index.php
+ErrorDocument 404 /404.html
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# 1) Jedna varianta domény: https + www
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^www\.pension48\.cz$ [NC]
+RewriteRule ^ https://www.pension48.cz%{REQUEST_URI} [R=301,L]
+
+# 2) Staré adresy WordPressu -> sekce nového webu (upravte podle skutečných adres starého webu)
+RewriteRule ^(ubytovani|ubytování|pokoje)/?$            /#ubytovani [R=301,L,NE]
+RewriteRule ^(cenik|ceník)/?$                           /#cenik [R=301,L,NE]
+RewriteRule ^(galerie|fotogalerie)/?$                   /#galerie [R=301,L,NE]
+RewriteRule ^(kontakt|kontakty)/?$                      /#kontakt [R=301,L,NE]
+RewriteRule ^(okoli|okolí|aktivity)/?$                  /#okoli [R=301,L,NE]
+RewriteRule ^(o-nas|o-penzionu|penzion)/?$              /#o-nas [R=301,L,NE]
+RewriteRule ^(poptavka|rezervace|objednavka)/?$         /#kontakt [R=301,L,NE]
+
+RewriteRule ^en/(accommodation|rooms)/?$                /en/#ubytovani [R=301,L,NE]
+RewriteRule ^en/(price-list|prices|pricing)/?$          /en/#cenik [R=301,L,NE]
+RewriteRule ^en/(gallery|photos)/?$                     /en/#galerie [R=301,L,NE]
+RewriteRule ^en/(contact|contacts)/?$                   /en/#kontakt [R=301,L,NE]
+RewriteRule ^en/(surroundings|activities)/?$            /en/#okoli [R=301,L,NE]
+RewriteRule ^en/(about|about-us)/?$                     /en/#o-nas [R=301,L,NE]
+
+RewriteRule ^de/(unterkunft|zimmer)/?$                  /de/#ubytovani [R=301,L,NE]
+RewriteRule ^de/(preisliste|preise)/?$                  /de/#cenik [R=301,L,NE]
+RewriteRule ^de/(galerie|fotos)/?$                      /de/#galerie [R=301,L,NE]
+RewriteRule ^de/(kontakt)/?$                            /de/#kontakt [R=301,L,NE]
+RewriteRule ^de/(umgebung|aktivitaeten)/?$              /de/#okoli [R=301,L,NE]
+RewriteRule ^de/(ueber-uns|uber-uns)/?$                 /de/#o-nas [R=301,L,NE]
+</IfModule>
+
+# Citlivé soubory
+<FilesMatch "^(poptavka-config.*\.php|.*\.(md|log|bak|sql))$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  <FilesMatch "\.(avif|webp|jpe?g|png|svg|woff2?|css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "public, max-age=300, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml text/xml
+</IfModule>
