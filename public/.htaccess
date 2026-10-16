@@ -6,10 +6,11 @@ Options -Indexes
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# 1) Jedna varianta domény: https + www
-RewriteCond %{HTTPS} !=on [OR]
-RewriteCond %{HTTP_HOST} !^www\.pension48\.cz$ [NC]
+# 1) HTTPS a jedna varianta domény (www). Subdoména test. se nepřesměrovává na www.
+RewriteCond %{HTTP_HOST} !^(www|test)\.pension48\.cz$ [NC]
 RewriteRule ^ https://www.pension48.cz%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # 2) Staré adresy WordPressu -> sekce nového webu (upravte podle skutečných adres starého webu)
 RewriteRule ^(ubytovani|ubytování|pokoje)/?$            /#ubytovani [R=301,L,NE]
@@ -41,6 +42,9 @@ RewriteRule ^de/(ueber-uns|uber-uns)/?$                 /de/#o-nas [R=301,L,NE]
 </FilesMatch>
 
 <IfModule mod_headers.c>
+  # Testovací subdoména se nesmí indexovat
+  SetEnvIfNoCase Host ^test\. NOINDEX_HOST
+  Header set X-Robots-Tag "noindex, nofollow" env=NOINDEX_HOST
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Frame-Options "SAMEORIGIN"

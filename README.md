@@ -42,17 +42,15 @@ Workflow `.github/workflows/deploy.yml` se spustí při každém pushi do `main`
 - `rsync` běží **bez `--delete`** pro celý web, takže nic cizího (WordPress, `poptavka-config.php`) nesmaže ani nepřepíše. Pouze složka `_astro/` (hashované soubory webu) se synchronizuje se smazáním starých verzí.
 - Pokud by na serveru `rsync` nebyl, nahraďte krok nasazení SFTP (např. akce `SamKirkland/FTP-Deploy-Action` s protokolem sftp, případně `lftp`).
 
-### Nejdřív testovací nasazení do podsložky
+### Nejdřív testovací nasazení na test.pension48.cz
 
-Web lze nejdřív nahrát do podsložky (např. `www.pension48.cz/test/`), aniž by se dotkl WordPressu:
+1. Ve Forpsi vytvořte subdoménu `test.pension48.cz` s vlastní složkou a zapněte pro ni HTTPS (certifikát). Poznamenejte si cestu k její složce.
+2. Secret `DEPLOY_PATH` nastavte na tuto složku. Proměnnou `SITE_BASE` **nenastavujte** (ta je jen pro variantu s podsložkou).
+3. Spusťte nasazení (push do `main` nebo *Run workflow*). `.htaccess` na subdoméně neindexuje web (`X-Robots-Tag: noindex`) a nepřesměrovává ji na `www`.
+4. `poptavka-config.php` nahrajte do složky subdomény (nebo o úroveň výš).
+5. **Ostrý provoz:** `DEPLOY_PATH` přepněte na kořen hlavního webu a nasaďte znovu. Subdoménu pak můžete zrušit. WordPress mažte až po kontrole.
 
-1. GitHub → *Settings → Secrets and variables → Actions → záložka **Variables*** → `SITE_BASE` = `/test` (název podsložky s lomítkem na začátku, bez lomítka na konci).
-2. Secret `DEPLOY_PATH` nastavte na cestu k této podsložce, např. `/www/domains/pension48.cz/www/test` (složku ve Forpsi předem vytvořte).
-3. Spusťte nasazení (push do `main` nebo *Run workflow*). V testovací verzi se web neindexuje (`noindex`), nenahrává se kořenový `.htaccess` (přesměrování a HTTPS/www ošetří až ostrý web) a všechny odkazy míří do podsložky.
-4. `poptavka-config.php` nahrajte do podsložky `test/` (nebo do složky nad ní).
-5. **Ostrý provoz:** proměnnou `SITE_BASE` smažte, `DEPLOY_PATH` přepněte na kořen webu a znovu nasaďte. Podsložku `test/` pak můžete smazat.
-
-Lokálně: `SITE_BASE=/test npm run build`.
+*Varianta podsložky* (`www.pension48.cz/test/`): repozitářová proměnná `SITE_BASE=/test` (Settings → Secrets and variables → Actions → Variables), `DEPLOY_PATH` na podsložku; kořenový `.htaccess` se pak nenahrává. Lokálně: `SITE_BASE=/test npm run build`.
 
 ### 1) SSH klíč jen pro nasazení
 
