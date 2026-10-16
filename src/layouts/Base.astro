@@ -3,7 +3,7 @@ import '@fontsource-variable/figtree/wght.css';
 import '@fontsource-variable/bricolage-grotesque/wght.css';
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
-import { site, langs, type Lang } from '../config/site';
+import { site, langs, withBase, isStaging, type Lang } from '../config/site';
 import { t } from '../i18n';
 import { pricing } from '../config/pricing';
 
@@ -11,10 +11,11 @@ interface Props {
   lang: Lang;
   noindex?: boolean;
 }
-const { lang, noindex = false } = Astro.props;
+const { lang, noindex: noindexProp = false } = Astro.props;
+const noindex = noindexProp || isStaging();
 const d = t(lang);
-const canonical = new URL(langs[lang].path, site.url).href;
-const og = new URL('/og.jpg', site.url).href;
+const canonical = new URL(withBase(langs[lang].path), site.url).href;
+const og = new URL(withBase('/og.jpg'), site.url).href;
 
 const schema = {
   '@context': 'https://schema.org',
@@ -76,10 +77,10 @@ const schema = {
     {
       !noindex &&
         (Object.keys(langs) as Lang[]).map((l) => (
-          <link rel="alternate" hreflang={langs[l].hreflang} href={new URL(langs[l].path, site.url).href} />
+          <link rel="alternate" hreflang={langs[l].hreflang} href={new URL(withBase(langs[l].path), site.url).href} />
         ))
     }
-    {!noindex && <link rel="alternate" hreflang="x-default" href={new URL('/', site.url).href} />}
+    {!noindex && <link rel="alternate" hreflang="x-default" href={new URL(withBase('/'), site.url).href} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={d.meta.title} />
@@ -91,9 +92,9 @@ const schema = {
     <meta property="og:locale" content={d.ogLocale} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#14203a" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="32x32" />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>

@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Pic from './Pic.astro';
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import { site, tel, langs, type Lang } from '../config/site';
+import { site, tel, langs, withBase, type Lang } from '../config/site';
 import { pricing } from '../config/pricing';
 import { t, quotes } from '../i18n';
 
@@ -50,14 +50,14 @@ const clientCfg = {
   <a class="skip" href="#top">{d.skip}</a>
   <header class="top">
     <div class="wrap">
-      <a class="logo" href={langs[lang].path + '#top'}>
+      <a class="logo" href={withBase(langs[lang].path) + '#top'}>
         <b>Pension <i>48</i></b><small>{d.tagline}</small>
       </a>
       <nav class="main" aria-label={d.menu}>
         {navKeys.map((k) => <a class="lnk" href={`#${ids[k]}`}>{d.nav[k]}</a>)}
         <div class="lang" role="group" aria-label={d.langLabel}>
           {(Object.keys(langs) as Lang[]).map((l) => (
-            <a href={langs[l].path} hreflang={langs[l].hreflang} lang={l} aria-current={l === lang ? 'true' : undefined}>{langs[l].label}</a>
+            <a href={withBase(langs[l].path)} hreflang={langs[l].hreflang} lang={l} aria-current={l === lang ? 'true' : undefined}>{langs[l].label}</a>
           ))}
         </div>
         <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mnav" aria-label={d.menu}><i></i><i></i><i></i></button>
@@ -298,7 +298,7 @@ const clientCfg = {
               <dt>{d.contact.op}</dt><dd class="small">{site.operator}, IČO {site.ico}</dd>
             </dl>
           </div>
-          <form id="enq" action="/poptavka.php" method="post" novalidate>
+          <form id="enq" action={withBase('/poptavka.php')} method="post" novalidate>
             <input type="hidden" name="lang" value={lang} />
             <input type="hidden" name="estimate" id="f-estimate" value="" />
             <input type="hidden" name="ts" id="f-ts" value="" />

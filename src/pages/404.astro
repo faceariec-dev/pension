@@ -1,14 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import { t } from '../i18n';
+import { withBase } from '../config/site';
 const d = t('cs');
 ---
 
 <Base lang="cs" noindex>
   <main class="nf">
-    <a class="logo" href="/" style="justify-self:center"><b style="font-size:2rem">Pension <i style="color:var(--amber);font-style:normal">48</i></b></a>
+    <a class="logo" href={withBase('/')} style="justify-self:center"><b style="font-size:2rem">Pension <i style="color:var(--amber);font-style:normal">48</i></b></a>
     <h1>{d.notFound.h}</h1>
     <p>{d.notFound.p}</p>
-    <p><a class="btn" href="/">{d.notFound.back}</a></p>
+    <p><a class="btn" href={withBase('/')}>{d.notFound.back}</a></p>
   </main>
 </Base>

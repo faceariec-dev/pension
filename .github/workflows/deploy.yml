@@ -22,6 +22,9 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+        env:
+          # Repozitářová proměnná (Settings → Variables). Pro testovací podsložku např. /test, pro ostrý web nenastavovat.
+          SITE_BASE: ${{ vars.SITE_BASE }}
 
       - name: Připravit SSH
         env:
@@ -39,9 +42,13 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           USER: ${{ secrets.SSH_USER }}
           TARGET: ${{ secrets.DEPLOY_PATH }}
+          SITE_BASE: ${{ vars.SITE_BASE }}
         run: |
           SSH="ssh -i ~/.ssh/deploy_key -p ${PORT:-22} -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts"
+          # Test v podsložce: kořenový .htaccess nenahrávat (přesměrování by mířila na kořen domény).
+          EXTRA=''
+          if [ -n "$SITE_BASE" ]; then EXTRA="--exclude=/.htaccess"; fi
           # 1) Soubory webu. Bez --delete: nic mimo web (WordPress, poptavka-config.php) se nemaže ani nepřepisuje.
-          rsync -rltvz --checksum --exclude='poptavka-config*.php' -e "$SSH" dist/ "$USER@$HOST:$TARGET/"
+          rsync -rltvz --checksum --exclude='poptavka-config*.php' $EXTRA -e "$SSH" dist/ "$USER@$HOST:$TARGET/"
           # 2) Jen složka _astro (hashované soubory webu): staré verze se smažou.
           rsync -rltvz --checksum --delete -e "$SSH" dist/_astro/ "$USER@$HOST:$TARGET/_astro/"

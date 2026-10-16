@@ -21,6 +21,11 @@ export const site = {
   },
 } as const;
 
+/** Cesta s ohledem na základní adresu webu (SITE_BASE), např. withBase('/en/') -> '/test/en/'. */
+export const withBase = (p: string) => import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + p.replace(/^\//, '');
+/** Testovací nasazení v podsložce: web se neindexuje. */
+export const isStaging = () => import.meta.env.BASE_URL !== '/';
+
 export const tel = (n: string) => 'tel:' + n.replace(/\s/g, '');
 
 export const langs = {
