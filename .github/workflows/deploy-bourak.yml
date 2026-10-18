@@ -1,0 +1,67 @@
+name: Deploy Bourák na Forpsi
+
+# Web Music Bar Bourák (repozitář faceariec-dev/musicbarbourak) do podsložky
+# www.pension48.cz/bourak/. Běží tady, protože tu jsou uložené přístupy k Forpsi
+# (stejné secrets jako u nasazení penzionu). Spouští se ručně.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Větev webu Bouráku
+        default: claude/music-bar-bourak-html-pk43km
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: faceariec-dev/musicbarbourak
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+        env:
+          SITE: https://www.pension48.cz
+          BASE: /bourak/
+
+      - name: Připravit SSH
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Nahrát web do /bourak (rsync po SSH)
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+          PORT: ${{ secrets.SSH_PORT }}
+          USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          SITE_BASE: ${{ vars.SITE_BASE }}
+        run: |
+          PORT="${PORT:-22}"
+          SSHOPTS="-i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o BatchMode=yes"
+          # DEPLOY_PATH míří na web penzionu (případně jeho testovací podsložku SITE_BASE, např. /test).
+          # Bourák patří vedle: <kořen webu>/bourak
+          if [ -z "$DEPLOY_PATH" ]; then echo "::error::Chybí DEPLOY_PATH"; exit 1; fi
+          ROOT="${DEPLOY_PATH%/}"
+          if [ -n "$SITE_BASE" ] && [ "${ROOT##*/}" = "${SITE_BASE#/}" ]; then ROOT="${ROOT%/*}"; fi
+          TARGET="$ROOT/bourak"
+          echo "Cíl: <kořen webu>/bourak"
+          ssh $SSHOPTS "$USER@$HOST" "mkdir -p '$TARGET'"
+          rsync -rltvz --checksum -e "ssh $SSHOPTS" dist/ "$USER@$HOST:$TARGET/"
+          rsync -rltvz --checksum --delete -e "ssh $SSHOPTS" dist/_astro/ "$USER@$HOST:$TARGET/_astro/"
