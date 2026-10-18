@@ -57,6 +57,7 @@ jobs:
           SSHOPTS="-i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o BatchMode=yes"
           # DEPLOY_PATH míří na web penzionu (případně jeho testovací podsložku SITE_BASE, např. /test).
           # Bourák patří vedle: <kořen webu>/bourak
+          if [ -z "$DEPLOY_PATH" ]; then echo "::error::Chybí DEPLOY_PATH"; exit 1; fi
           ROOT="${DEPLOY_PATH%/}"
           if [ -n "$SITE_BASE" ] && [ "${ROOT##*/}" = "${SITE_BASE#/}" ]; then ROOT="${ROOT%/*}"; fi
           TARGET="$ROOT/bourak"
